@@ -30,7 +30,7 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
-    // ✅ Main security filter chain
+     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http  
@@ -45,25 +45,25 @@ public class SecurityConfig {
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // ✅ Allow H2 console (frame headers)
+   
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
 
-    // ✅ Password encoder (for BCrypt)
+     
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ Authentication Manager (for login logic)
+     
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // ✅ Expose UserDetailsService if needed
+     
     @Bean
     public UserDetailsService userDetailsService() {
         return userDetailsService;

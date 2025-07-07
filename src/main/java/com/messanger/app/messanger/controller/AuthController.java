@@ -23,7 +23,8 @@ import com.messanger.app.messanger.dto.UserSearchResponse;
 import com.messanger.app.messanger.entity.AppUser;
 import com.messanger.app.messanger.repository.UserRepository;
 import com.messanger.app.messanger.services.JwtService;
-
+import com.messanger.app.messanger.services.UserService;
+ 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -33,6 +34,9 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired(required=true)
+    private UserService userService;
 
   
 @Autowired
@@ -88,26 +92,19 @@ public ResponseEntity<?> login(@RequestBody LoginRequest request) {
     @GetMapping("/search")
     public ResponseEntity<List<UserSearchResponse>> searchUsers(
             @RequestHeader("Authorization") String authHeader,
-            @RequestParam("username") String username) {
+            @RequestParam("username") String keyword) {
 
-         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         String token = authHeader.substring(7);
-        if (!jwtService.validateToken(token)) {
+
+        try {
+            List<UserSearchResponse> result = userService.searchUsers(token, keyword);
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
-         String currentUsername = jwtService.extractUsername(token);
-
-         List<AppUser> users = userRepository.findByUsernameContainingIgnoreCase(username);
-
-         List<UserSearchResponse> result = users.stream()
-            .filter(u -> !u.getUsername().equalsIgnoreCase(currentUsername))  
-            .map(UserSearchResponse::new)
-            .toList();
-
-        return ResponseEntity.ok(result);
     }
 }
