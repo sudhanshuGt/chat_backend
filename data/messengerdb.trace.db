@@ -1,0 +1,72 @@
+2025-07-04 12:46:26.363081+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "MESSAGES" not found; SQL statement:
+SELECT m.* FROM messages m
+INNER JOIN (
+  SELECT
+    CASE
+      WHEN sender_id = ? THEN receiver_id
+      ELSE sender_id
+    END AS chat_partner,
+    MAX(timestamp) AS last_time
+  FROM messages
+  WHERE sender_id = ? OR receiver_id = ?
+  GROUP BY chat_partner
+) grp ON
+  ((m.sender_id = ? AND m.receiver_id = grp.chat_partner)
+   OR (m.receiver_id = ? AND m.sender_id = grp.chat_partner))
+  AND m.timestamp = grp.last_time
+ [42102-232]
+2025-07-04 12:46:57.706427+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "MESSAGES" not found; SQL statement:
+SELECT m.* FROM messages m
+INNER JOIN (
+  SELECT
+    CASE
+      WHEN sender_id = ? THEN receiver_id
+      ELSE sender_id
+    END AS chat_partner,
+    MAX(timestamp) AS last_time
+  FROM messages
+  WHERE sender_id = ? OR receiver_id = ?
+  GROUP BY chat_partner
+) grp ON
+  ((m.sender_id = ? AND m.receiver_id = grp.chat_partner)
+   OR (m.receiver_id = ? AND m.sender_id = grp.chat_partner))
+  AND m.timestamp = grp.last_time
+ [42102-232]
+2025-07-04 12:47:43.464560+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "MESSAGES" not found; SQL statement:
+SELECT m.* FROM messages m
+INNER JOIN (
+  SELECT
+    CASE
+      WHEN sender_id = ? THEN receiver_id
+      ELSE sender_id
+    END AS chat_partner,
+    MAX(timestamp) AS last_time
+  FROM messages
+  WHERE sender_id = ? OR receiver_id = ?
+  GROUP BY chat_partner
+) grp ON
+  ((m.sender_id = ? AND m.receiver_id = grp.chat_partner)
+   OR (m.receiver_id = ? AND m.sender_id = grp.chat_partner))
+  AND m.timestamp = grp.last_time
+ [42102-232]
+2025-07-04 13:28:13.017773+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "MESSAGES" not found; SQL statement:
+SELECT m.* FROM messages m
+INNER JOIN (
+  SELECT
+    CASE
+      WHEN sender_id = ? THEN receiver_id
+      ELSE sender_id
+    END AS chat_partner,
+    MAX(timestamp) AS last_time
+  FROM messages
+  WHERE sender_id = ? OR receiver_id = ?
+  GROUP BY chat_partner
+) grp ON
+  ((m.sender_id = ? AND m.receiver_id = grp.chat_partner)
+   OR (m.receiver_id = ? AND m.sender_id = grp.chat_partner))
+  AND m.timestamp = grp.last_time
+ [42102-232]
