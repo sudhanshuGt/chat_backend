@@ -17,4 +17,5 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
            "LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(CONCAT(u.firstName, ' ', u.lastName)) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<AppUser> searchByKeyword(@Param("keyword") String keyword);
+
 }

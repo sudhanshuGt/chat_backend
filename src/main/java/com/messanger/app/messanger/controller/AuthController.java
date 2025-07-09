@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,7 @@ private JwtService jwtService;
         user.setUsername(request.getUsername());
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
+        user.setProfile("https://cdn-icons-png.flaticon.com/512/6897/6897018.png");
         user.setBio(request.getBio());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
@@ -63,6 +65,20 @@ private JwtService jwtService;
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully.");
     }
   
+
+    
+    @PostMapping("/profile")
+    public ResponseEntity<AppUser> updateUser( @RequestHeader("Authorization") String authHeader, @RequestBody AppUser updatedUser) {
+       
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String token = authHeader.substring(7);
+        AppUser user = userService.updateUser(token, updatedUser);
+        return ResponseEntity.ok(user);
+    }
+
 
 @PostMapping("/login")
 public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -76,6 +92,7 @@ public ResponseEntity<?> login(@RequestBody LoginRequest request) {
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("username", user.getUsername());
+            response.put("profile", user.getProfile());
             response.put("email", user.getEmail());
             response.put("firstName", user.getFirstName());
             response.put("lastName", user.getLastName());

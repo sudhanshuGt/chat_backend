@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.messanger.app.messanger.dto.UserSearchResponse;
+import com.messanger.app.messanger.entity.AppUser;
 import com.messanger.app.messanger.repository.UserRepository;
 
 
@@ -28,5 +29,21 @@ public class UserService  {
                 .filter(u -> !u.getUsername().equalsIgnoreCase(currentUsername))
                 .map(UserSearchResponse::new)
                 .toList();
+    }
+
+
+      public AppUser updateUser(String token, AppUser updatedUserData) {
+        String userId = jwtService.extractUsername(token);
+        return userRepository.findByUsername(userId)
+                .map(existingUser -> {
+                    existingUser.setUsername(updatedUserData.getUsername());
+                    existingUser.setEmail(updatedUserData.getEmail());
+                    existingUser.setFirstName(updatedUserData.getFirstName());
+                    existingUser.setLastName(updatedUserData.getLastName());
+                    existingUser.setProfile(updatedUserData.getProfile());
+                    existingUser.setBio(updatedUserData.getBio());
+                    return userRepository.save(existingUser);  
+                })
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
     }
 }
